@@ -75,12 +75,12 @@ export const main = async (event) => {
       ReturnValues: 'ALL_NEW',
     };
 
-    await dynamoDb.update(params).promise();
+    const response = await dynamoDb.update(params).promise();
 
     return {
-      statusCode: 204,
+      statusCode: 200,
       headers: corsResponseHeaders,
-      body: JSON.stringify({ data: { postId, action }}),
+      body: JSON.stringify({ data: response.Attributes }),
     };
   } catch (error) {
     console.log(JSON.stringify(error));
