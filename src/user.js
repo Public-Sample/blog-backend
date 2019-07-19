@@ -14,4 +14,4 @@ export const fetchPoolUserByEvent = async (event) => {
   }).promise();
 
   return user;
-}
+};

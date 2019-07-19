@@ -31,7 +31,7 @@ const validate = (event) => {
   return errors;
 };
 
-export const main = async (event, context) => {
+export const main = async (event) => {
   const errors = validate(event);
 
   if (errors.length > 0) {
@@ -41,11 +41,11 @@ export const main = async (event, context) => {
       statusCode: 400,
       headers: corsResponseHeaders,
       body: JSON.stringify({ errors })
-    }
+    };
   }
 
   try {
-    const id = event.pathParameters.id;
+    const postId = event.pathParameters.id;
 
     let action = '';
     if (event.queryStringParameters.action && typeof event.queryStringParameters.action === 'string') {
@@ -67,10 +67,7 @@ export const main = async (event, context) => {
 
     const params = {
       TableName: process.env.tableName,
-      Key: {
-          'userId': user.Username,
-          'postId': id,
-      },
+      Key: { postId },
       UpdateExpression: updateExpression,            
       ExpressionAttributeValues: {
         ':likedBy': dynamoDb.createSet([user.Username])             
@@ -83,7 +80,7 @@ export const main = async (event, context) => {
     return {
       statusCode: 204,
       headers: corsResponseHeaders,
-      body: JSON.stringify({ data: { id, action }}),
+      body: JSON.stringify({ data: { postId, action }}),
     };
   } catch (error) {
     console.log(JSON.stringify(error));
@@ -102,4 +99,4 @@ export const main = async (event, context) => {
       })
     };
   }
-}
+};

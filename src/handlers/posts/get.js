@@ -1,37 +1,34 @@
-import uuid from "uuid";
 import AWS from "aws-sdk";
-import { fetchPoolUserByEvent } from '../../user';
 import { corsResponseHeaders } from '../../headers';
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-const isJson = (input) => {
-  if (typeof input !== 'string') {
-    return false;
-  }
-
-  try {
-    JSON.parse(input);
-
-    return true;
-  } catch (error) {
-    return false;
-  }
-};
-
 export const main = async (event) => {
   try {
-    const user = await fetchPoolUserByEvent(event);
+    const postId = event.pathParameters.id;
 
     const params = {
       TableName: process.env.tableName,
-      Key: {
-        'userId': user.Username,
-        'postId': event.pathParameters.id,
-      },
+      Key: { postId },
     };
 
     const response = await dynamoDb.get(params).promise();
+
+    if (typeof response.Item === 'undefined') {
+      return {
+        statusCode: 404,
+        headers: corsResponseHeaders,
+        body: JSON.stringify({
+          errors: [
+            {
+              status: '404',
+              title: 'NotFound',
+              detail: `A post with id ${postId} does not exist.`,
+            }
+          ]
+        })
+      };
+    }
 
     return {
       statusCode: 200,
@@ -55,4 +52,4 @@ export const main = async (event) => {
       })
     };
   }
-}
+};

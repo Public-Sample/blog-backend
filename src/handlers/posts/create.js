@@ -27,7 +27,19 @@ const validate = (event) => {
     errors.push({
       status: '400',
       title: 'BadRequest',
-      detail: 'Request body is empty or invalid json'
+      detail: 'Request body is empty or invalid json',
+    });
+
+    return errors;
+  }
+
+  const parsed = JSON.parse(body);
+console.log(JSON.stringify(parsed));
+  if (typeof parsed.data === 'undefined' || typeof parsed.data.content !== 'string') {
+    errors.push({
+      status: '400',
+      title: 'BadRequest',
+      detail: 'The `content` property must be provided.',
     });
   }
 
@@ -41,8 +53,8 @@ export const main = async (event) => {
     return {
       statusCode: 400,
       headers: corsResponseHeaders,
-      body: JSON.stringify({ errors })
-    }
+      body: JSON.stringify({ errors }),
+    };
   }
 
   try {
@@ -53,9 +65,9 @@ export const main = async (event) => {
     const params = {
       TableName: process.env.tableName,
       Item: {
-        userId: user.Username,
+        authorId: user.Username,
         postId: uuid.v4(),
-        content: parsedBody.content,
+        content: parsedBody.data.content,
         createdAt: Date.now()
       }
     };
@@ -78,10 +90,10 @@ export const main = async (event) => {
           {
             status: '500',
             title: 'InternalServerError',
-            detail: error.message
+            detail: error.message,
           }
         ]
       })
     };
   }
-}
+};

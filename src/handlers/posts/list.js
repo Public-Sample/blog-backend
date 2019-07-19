@@ -35,4 +35,4 @@ export const main = async (event) => {
       })
     };
   }
-}
+};
