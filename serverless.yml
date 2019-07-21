@@ -4,6 +4,7 @@ plugins:
   - serverless-webpack
 
 custom:
+  environment: ${file(env.yml):${self:custom.stage}, file(env.yml):default}
   stage: ${opt:stage, self:provider.stage}
   tableName: ${self:custom.stage}-posts
   tableThroughputs:
@@ -22,7 +23,7 @@ provider:
   environment:
     tableName: ${self:custom.tableName}
     # @todo Instead get this from ref
-    userPoolId: 'ap-southeast-2_F3fx6pfBJ'
+    userPoolId: ${self:custom.environment.cognito.userpool.id}
 
   iamRoleStatements:
     - Effect: Allow

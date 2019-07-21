@@ -46,7 +46,7 @@ console.log(JSON.stringify(parsed));
   return errors;
 };
 
-export const main = async (event) => {
+export const main = async (event, context) => {
   const errors = validate(event);
 
   if (errors.length > 0) {
@@ -60,7 +60,7 @@ export const main = async (event) => {
   try {
     const parsedBody = JSON.parse(event.body);
 
-    const user = await fetchPoolUserByEvent(event);
+    const user = await fetchPoolUserByEvent(event, context);
 
     const params = {
       TableName: process.env.tableName,

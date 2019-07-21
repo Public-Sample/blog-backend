@@ -19,10 +19,14 @@ I also considered using Nginx and EC2(NodeJS/Express) but felt that there would 
 
 Generally I try to conform my APIs somewhat closely to REST conventions, JSON API (https://jsonapi.org/format/) and implement JSON schema (https://json-schema.org/) which works well with Ajv.
 
+React-bootstrap is used on the frontend to allow for a more adaptive layout.
+
 #### Tradeoffs
 When executing a deployment with serverless, code is packaged locally, and then uploaded to S3 in conjunction with CloudFormation invocation. This can all add up and can mean slower development if a developer is deploying in order to test what they're writing. This can be alleviated with local tests (or using the serverless offline plugin), though still, there can be overheads. The advantages of most of the AWS technologies is they either allow for automated horizontal scale, or must be written in such a way which works well with partitioning and sharding.
 
 #### What's Not Done / Getting Production Ready
+- SSL not yet setup, network communication is unencrypted
+- Config should be filled via environment CI or via a stage specific service, eg s3
 - MobX/Redux state management is not implemented. This would almost certainly be required for a production app.
 - Only minimal tests included. Ideally coverage would be approx 90%+ with use of mocks, drop in replacements such as proxyquire and http interceptors such as nock.
 - XSS, react string escapes much of the output, but this would need to be properly checked.
@@ -35,6 +39,8 @@ When executing a deployment with serverless, code is packaged locally, and then 
 - Sorting/filter/pagination on backend api endpoints
 - Browser compatiblity testing
 - Add documentation generator, eg swagger (works well with JSON Schema)
+- Currently the user particulars in the UI is just a userId whereas the would typically be a full name or email address. This detail should either be captured and managed via cognito user pools, within the app as a document in the db, or both. Though only one should be used as a source of truth.
+- Styling, css and image usage on the frontend
 
 #### Done Differently
 - Use an alternative document database

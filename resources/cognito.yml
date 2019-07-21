@@ -9,7 +9,7 @@ Resources:
         - email
       AutoVerifiedAttributes:
         - email
-
+        
   CognitoUserPoolClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
