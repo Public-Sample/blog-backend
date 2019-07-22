@@ -42,8 +42,17 @@ When executing a deployment with serverless, code is packaged locally, and then 
 - Currently the user particulars in the UI is just a userId whereas the would typically be a full name or email address. This detail should either be captured and managed via cognito user pools, within the app as a document in the db, or both. Though only one should be used as a source of truth.
 - Styling, css and image usage on the frontend
 
+Changes:
+- Fixed an issue with storage and access of post documents
+- Fixed an issue with state propagation 
+- Started on integration tests against the backend api, work in progress pushed onto branch 'changes'
+-- Involves making http requests against api-gateway
+-- Attempted to make use of amplify, though this is targetted at web clients and though works in node, I haven't yet been able to get it to pass through identity provider config in the request headers, or the authorizer claims.
+-- I was able to use cognito to generate the authorization token, and then sign the request using aws4
+but was again experiencing issues with the lambda passthrough
+
 #### Done Differently
-- Use an alternative document database
+- Lambda is a solid choice for horizontally scaled processing however, in this instance, it has added a lot of extra time cost as during experimental development the function must be packaged and deployed for testing. The serverless-offline test module isn't fully able to replicate the AWS environment properly to alleviate this.
 
 #### Hosted App
 d1aljryb3xijfm.cloudfront.net
