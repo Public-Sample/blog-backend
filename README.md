@@ -54,6 +54,8 @@ but was again experiencing issues with the lambda passthrough
 #### Done Differently
 - Lambda is a solid choice for horizontally scaled processing however, in this instance, it has added a lot of extra time cost as during experimental development the function must be packaged and deployed for testing. The serverless-offline test module isn't fully able to replicate the AWS environment properly to alleviate this.
 
+If undertaking or extending this project, I'd consider constructing a docker container with nginx, mongo and replacing the frontend's auth with a social provider.
+
 #### Hosted App
 d1aljryb3xijfm.cloudfront.net
 http://preface-frontend.s3-website-ap-southeast-2.amazonaws.com
